@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn" name="MyApp" packages="">
+    <Appenders>
+        <Console name="stdout" ignoreExceptions="false">
+            <PatternLayout pattern="%m"/>
+        </Console>
+
+        <File name="file" fileName="log1.log" immediateFlush="false" append="false" >
+            <PatternLayout pattern="%m"/>
+        </File>
+
+        <!--<Socket name="socket" host="127.0.0.1" port="8000">-->
+            <!--<SerializedLayout />-->
+            <!--&lt;!&ndash;<PatternLayout pattern="%m"/>&ndash;&gt;-->
+        <!--</Socket>-->
+
+        <Http name="http" url="http://localhost:10000/log">
+            <PatternLayout pattern="%m"/>
+        </Http>
+
+        <Async name="simpleAsync" errorRef="stdout">
+            <AppenderRef ref="file"/>
+        </Async>
+
+        <RandomAccessFile name="fullAsync" fileName="log2.log" immediateFlush="false" append="false" >
+            <PatternLayout pattern="%m"/>
+        </RandomAccessFile>
+
+        <!--<Async name="Asyncsocket">-->
+            <!--<AppenderRef ref="socket"/>-->
+        <!--</Async>-->
+
+        <Async name="httpAsync">
+            <AppenderRef ref="http"/>
+        </Async>
+
+        <!--<Failover name="httpFailover" primary="http">-->
+            <!--<Failovers>-->
+                <!--<AppenderRef ref="stdout"/>-->
+            <!--</Failovers>-->
+        <!--</Failover>-->
+
+        <!--<Failover name="httpSimpleAsync" primary="simpleAsync">-->
+            <!--<Failovers>-->
+                <!--<AppenderRef ref="stdout"/>-->
+            <!--</Failovers>-->
+        <!--</Failover>-->
+
+        <!--<Failover name="httpFullAsync" primary="fullAsync">-->
+            <!--<Failovers>-->
+                <!--<AppenderRef ref="stdout"/>-->
+            <!--</Failovers>-->
+        <!--</Failover>-->
+
+    </Appenders>
+    <Loggers>
+        <Logger name="simpleAsyncElog" additivity="false" level="info">
+            <AppenderRef ref="simpleAsync" />
+        </Logger>
+
+        <AsyncLogger name="fullAsyncElog" additivity="false" level="info">
+            <AppenderRef ref="fullAsync"/>
+        </AsyncLogger>
+
+        <!--<Logger name="elogSocket" additivity="false" level="info">-->
+            <!--<AppenderRef ref="Asyncsocket" />-->
+        <!--</Logger>-->
+
+        <Logger name="httpAsyncElog" additivity="false" level="info">
+            <AppenderRef ref="httpAsync" />
+        </Logger>
+
+        <AsyncLogger name="httpElog" additivity="false" level="info">
+            <AppenderRef ref="httpAsync" />
+        </AsyncLogger>
+
+
+        <Root level="error">
+            <AppenderRef ref="stdout"/>
+        </Root>
+    </Loggers>
+</Configuration>

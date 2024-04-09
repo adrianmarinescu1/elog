@@ -1,0 +1,28 @@
+java -classpath ".;..\..\lib\*" -Dlog4j.configuration="file:.\log4j2.xml" com.axway.fltest.FileLockTest 1000000 A 100
+
+java -Xms1G -Xmx1G -classpath ".;..\..\lib\*" -Dlog4j.configuration="file:.\log4j2.xml" -Dlog4j2.asyncLoggerRingBufferSize=4194304 -Dlog4j2.asyncLoggerConfigRingBufferSize=4194304 -DAsyncLogger.WaitStrategy=busyspin com.axway.fltest.FileLockTest 1000000 A 1
+
+java  -classpath ".;..\..\lib\*" -Dlog4j.configuration="file:.\log4j2.xml" -Dlog4j2.asyncLoggerRingBufferSize=4194304 -Dlog4j2.asyncLoggerConfigRingBufferSize=4194304 -DAsyncLogger.WaitStrategy=busyspin com.axway.fltest.FileLockTest 1000000 A 1
+
+-Xms1G -Xmx1G -Dlog4j2.asyncLoggerRingBufferSize=4194304 -Dlog4j2.asyncLoggerConfigRingBufferSize=4194304 -DAsyncLogger.WaitStrategy=busyspin
+
+export MAVEN_OPTS='-Xms1G -Xmx1G'
+
+java -server -classpath ".;..\..\lib\*" org.apache.logging.log4j.core.net.server.TcpSocketServer -i -p 8000 -c log4j2Server.xml
+
+mvn exec:java -DskipTests=true -Dlog4j2.asyncLoggerRingBufferSize=4194304 -Dlog4j2.asyncLoggerConfigRingBufferSize=4194304 -DAsyncLogger.WaitStrategy=busyspin -Dexec.mainClass="com.axway.fltest.FileLockTest" -Dexec.args="10000 A 1"
+
+mvn clean install -DskipTests=true -Dlog4j2.asyncLoggerRingBufferSize=4194304 -Dlog4j2.asyncLoggerConfigRingBufferSize=4194304 -DAsyncLogger.WaitStrategy=busyspin spring-boot:run
+
+-- small
+
+mvn exec:java -DskipTests=true -Dexec.mainClass="com.axway.fltest.FileLockTest" -Dexec.args="10000 A 1"
+
+mvn clean install -DskipTests=true spring-boot:run
+
+-- good
+
+mvn exec:java -DskipTests=true -Dlog4j2.asyncLoggerRingBufferSize=4194304 -Dlog4j2.asyncLoggerConfigRingBufferSize=4194304 -DAsyncLogger.WaitStrategy=busyspin -Dexec.mainClass="com.axway.fltest.FileLockTest" -Dexec.args="10000 A 1"
+
+mvn clean install -DskipTests=true -Dlog4j2.asyncLoggerRingBufferSize=4194304 -Dlog4j2.asyncLoggerConfigRingBufferSize=4194304 -DAsyncLogger.WaitStrategy=busyspin spring-boot:run
+
